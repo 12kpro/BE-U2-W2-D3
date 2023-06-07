@@ -16,8 +16,7 @@ import java.util.UUID;
 @Table(name = "edifici")
 public class Edificio {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue
     private UUID id;
     private String name;
     private String indirizzo;
@@ -25,4 +24,9 @@ public class Edificio {
     @ManyToOne(cascade = CascadeType.ALL)
     private Citta citta;
 
+    public Edificio(String name, String indirizzo, Citta citta) {
+        this.name = name;
+        this.indirizzo = indirizzo;
+        this.citta = citta;
+    }
 }

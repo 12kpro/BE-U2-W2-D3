@@ -9,7 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
-@AllArgsConstructor
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -17,12 +17,18 @@ import java.util.UUID;
 @Table(name = "postazioni")
 public class Postazione {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue
     private UUID id ;
     private String descrizione;
     private TipoPostazione tipo;
     private Integer occupanti;
     @ManyToOne
     private Edificio edificio;
+
+    public Postazione(String descrizione, TipoPostazione tipo, Integer occupanti, Edificio edificio) {
+        this.descrizione = descrizione;
+        this.tipo = tipo;
+        this.occupanti = occupanti;
+        this.edificio = edificio;
+    }
 }

@@ -17,8 +17,7 @@ import java.util.UUID;
 @Table(name = "prenotazioni")
 public class Prenotazione {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue
     private UUID id;
     private LocalDate data;
     @ManyToOne(cascade = CascadeType.ALL)

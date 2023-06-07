@@ -1,27 +1,53 @@
 package com.BEU2W2D3.gestioneprenotazioni.exceptions;
 
-import com.BEU2W2D3.gestioneprenotazioni.payloads.ErrorPayload;
+import com.BEU2W2D3.gestioneprenotazioni.payloads.ErrorsPayload;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ReqException.class)
-    public ResponseEntity<ErrorPayload> handleNotFound(ReqException e) {
-        ErrorPayload payload = new ErrorPayload(e.getMessage(), new Date(), 404);
-        return new ResponseEntity<ErrorPayload>(payload, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorsPayloadWithErrorsList> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(error -> error.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        ErrorsPayloadWithErrorsList payload = new ErrorsPayloadWithErrorsList("Ci sono stati errori nel body",
+                new Date(), 400,
+                errors);
+
+        return new ResponseEntity<ErrorsPayloadWithErrorsList>(payload, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorsPayload> handleBadRequest(BadRequestException e) {
+
+        ErrorsPayload payload = new ErrorsPayload(e.getMessage(), new Date(), 400);
+
+        return new ResponseEntity<ErrorsPayload>(payload, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorsPayload> handleNotFound(NotFoundException e) {
+
+        ErrorsPayload payload = new ErrorsPayload(e.getMessage(), new Date(), 404);
+
+        return new ResponseEntity<ErrorsPayload>(payload, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorPayload> handleGenericErrors(Exception e) {
+    public ResponseEntity<ErrorsPayload> handleGeneric(Exception e) {
         System.out.println(e);
-        ErrorPayload payload = new ErrorPayload("GENERIC SERVER ERROR! WE GONNA FIX IT ASAP!", new Date(), 500);
-        return new ResponseEntity<ErrorPayload>(payload, HttpStatus.INTERNAL_SERVER_ERROR);
+        ErrorsPayload payload = new ErrorsPayload("Errore Generico", new Date(), 500);
+
+        return new ResponseEntity<ErrorsPayload>(payload, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

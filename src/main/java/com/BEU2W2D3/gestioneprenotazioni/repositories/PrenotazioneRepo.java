@@ -11,8 +11,9 @@ import java.util.Optional;
 import java.util.UUID;
 @Repository
 public interface PrenotazioneRepo extends JpaRepository<Prenotazione, UUID> {
-    Optional<Prenotazione> findByUtenteAndData(Utente utente, LocalDate data);
+     Optional<Prenotazione> findByUtente_IdAndData(UUID id, LocalDate data);
+
+    Optional<Prenotazione> findByDataAndPostazione_Id(LocalDate data, UUID id);
 
 
-    Optional<Prenotazione> findByDataAndPostazione(LocalDate data, Postazione postazione);
 }

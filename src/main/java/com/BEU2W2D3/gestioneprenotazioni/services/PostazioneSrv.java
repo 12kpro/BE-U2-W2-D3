@@ -1,7 +1,6 @@
 package com.BEU2W2D3.gestioneprenotazioni.services;
 
 import com.BEU2W2D3.gestioneprenotazioni.entities.Postazione;
-import com.BEU2W2D3.gestioneprenotazioni.exceptions.IdNotFoundException;
 import com.BEU2W2D3.gestioneprenotazioni.repositories.PostazioneRepo;
 import com.BEU2W2D3.gestioneprenotazioni.utils.TipoPostazione;
 import org.springframework.beans.factory.annotation.Autowired;

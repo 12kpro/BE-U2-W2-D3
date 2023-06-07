@@ -19,10 +19,15 @@ import java.util.UUID;
 @Table(name = "utenti")
 public class Utente {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue
     private UUID id;
     private String nome;
     private String cognome;
     private String email;
+
+    public Utente(String nome, String cognome, String email) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+    }
 }

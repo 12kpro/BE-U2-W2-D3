@@ -17,8 +17,11 @@ import java.util.UUID;
 @Entity
 public class Citta {
     @Id
-    @GeneratedValue(generator = "uuid-hibernate-generator")
-    @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue
     private UUID id;
-    private String name;
+    private String nome;
+
+    public Citta(String nome) {
+        this.nome = nome;
+    }
 }
