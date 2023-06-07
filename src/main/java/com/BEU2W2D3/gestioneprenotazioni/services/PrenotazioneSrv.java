@@ -1,13 +1,11 @@
 package com.BEU2W2D3.gestioneprenotazioni.services;
 
-import com.BEU2W2D3.gestioneprenotazioni.entities.Citta;
 import com.BEU2W2D3.gestioneprenotazioni.entities.Postazione;
 import com.BEU2W2D3.gestioneprenotazioni.entities.Prenotazione;
 import com.BEU2W2D3.gestioneprenotazioni.entities.Utente;
 import com.BEU2W2D3.gestioneprenotazioni.exceptions.BadRequestException;
 import com.BEU2W2D3.gestioneprenotazioni.exceptions.NotFoundException;
 import com.BEU2W2D3.gestioneprenotazioni.payloads.PrenotazioneRegistrationPayload;
-import com.BEU2W2D3.gestioneprenotazioni.repositories.PostazioneRepo;
 import com.BEU2W2D3.gestioneprenotazioni.repositories.PrenotazioneRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,11 +22,23 @@ public class PrenotazioneSrv {
     @Autowired
     private PrenotazioneRepo prenotazioneRepo;
     @Autowired
-    private PostazioneRepo postazioneRepo;
-    public void create(PrenotazioneRegistrationPayload p) {
+    private PostazioneSrv postazioneSrv;
+    @Autowired
+    private UtenteSrv utenteSrv;
+    public Prenotazione create(PrenotazioneRegistrationPayload p) throws  BadRequestException{
+        LocalDate date = LocalDate.now();
         this.findByDataAndPostazione(p.getPostazione(), p.getData());
         this.findByUtenteAndData( p.getData(), p.getUtente());
-        prenotazioneRepo.save(p);
+
+        if ( p.getData() < date.plusDays(2)){
+            throw new BadRequestException("data non valida");
+        }
+        Postazione postazione = postazioneSrv.findById(p.getPostazione());
+        Utente usr = utenteSrv.findById(p.getUtente());
+
+        Prenotazione newPrenotazione = new Prenotazione(p.getData(),postazione,usr);
+
+        return prenotazioneRepo.save(newPrenotazione);
     }
     public Page<Prenotazione> find(int page, int size, String sortBy) {
         if (size < 0)

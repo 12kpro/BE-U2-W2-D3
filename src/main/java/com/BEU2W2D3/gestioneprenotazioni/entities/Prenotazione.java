@@ -24,4 +24,10 @@ public class Prenotazione {
     private Postazione postazione;
     @ManyToOne(cascade = CascadeType.ALL)
     private Utente utente;
+
+    public Prenotazione(LocalDate data, Postazione postazione, Utente utente) {
+        this.data = data;
+        this.postazione = postazione;
+        this.utente = utente;
+    }
 }

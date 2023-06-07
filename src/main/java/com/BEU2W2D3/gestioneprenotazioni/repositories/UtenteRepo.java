@@ -9,4 +9,7 @@ import java.util.UUID;
 @Repository
 public interface UtenteRepo extends JpaRepository<Utente, UUID> {
     Optional<Utente> findByEmail(String email);
+
+    @Override
+    Optional<Utente> findById(UUID uuid);
 }
