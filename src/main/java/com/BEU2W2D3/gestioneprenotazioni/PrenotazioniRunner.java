@@ -33,7 +33,7 @@ public class PrenotazioniRunner implements CommandLineRunner {
     PrenotazioneSrv prenotazioneSrv;
     Faker faker = new Faker(new Locale("it"));
 
-    private Boolean auto = true;
+    private Boolean auto = false;
     @Override
     public void run(String... args) throws Exception {
 

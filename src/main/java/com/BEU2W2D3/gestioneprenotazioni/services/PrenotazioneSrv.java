@@ -26,13 +26,11 @@ public class PrenotazioneSrv {
     @Autowired
     private UtenteSrv utenteSrv;
     public Prenotazione create(PrenotazioneRegistrationPayload p) throws  BadRequestException{
-        LocalDate date = LocalDate.now();
         this.findByDataAndPostazione(p.getPostazione(), p.getData());
         this.findByUtenteAndData( p.getData(), p.getUtente());
-
-        if ( p.getData() < date.plusDays(2)){
-            throw new BadRequestException("data non valida");
-        }
+//        if ( p.getData().isAfter(date.plusDays(2))){
+//            throw new BadRequestException("data non valida");
+//        }
         Postazione postazione = postazioneSrv.findById(p.getPostazione());
         Utente usr = utenteSrv.findById(p.getUtente());
 
@@ -57,6 +55,16 @@ public class PrenotazioneSrv {
     }
     public Prenotazione findById(UUID id) throws NotFoundException {
         return prenotazioneRepo.findById(id).orElseThrow(() -> new NotFoundException("Prenotazione non trovata!"));
+    }
+    public Prenotazione findByIdAndUpdate(UUID id, Prenotazione p) throws NotFoundException {
+        Prenotazione found = this.findById(id);
+
+        //found.setId(id);
+        found.setData(p.getData());
+        found.setUtente(p.getUtente());
+        found.setPostazione(p.getPostazione());
+
+        return prenotazioneRepo.save(found);
     }
     public void findByIdAndDelete(UUID id) {
         Prenotazione found = this.findById(id);

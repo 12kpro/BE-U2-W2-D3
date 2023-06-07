@@ -2,6 +2,7 @@ package com.BEU2W2D3.gestioneprenotazioni.payloads;
 
 import com.BEU2W2D3.gestioneprenotazioni.entities.Postazione;
 import com.BEU2W2D3.gestioneprenotazioni.entities.Utente;
+import com.BEU2W2D3.gestioneprenotazioni.validators.PrenotazioneDateConstraint;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Email;
@@ -16,6 +17,7 @@ import java.util.UUID;
 public class PrenotazioneRegistrationPayload {
 
     @NotNull(message = "La data è obbligatoria")
+    @PrenotazioneDateConstraint
     private LocalDate data;
     @NotNull(message = "La postazione è obbligatoria")
     private UUID postazione;
